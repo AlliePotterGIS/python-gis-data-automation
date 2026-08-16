@@ -1,7 +1,8 @@
+
 # Storm Response GIS
 
 ## Severe Weather & Tree-Impact Analysis
-
+![2025 Missouri Storm-Related Tree Impacts](images/missouri_tree_impacts_2025.jpg)
 This project explores how GIS and Python can support storm-response operations by identifying and mapping severe-weather events associated with reported tree impacts.
 
 The project uses publicly available NOAA Storm Events data and U.S. Census Bureau geographic data to create a reproducible workflow for identifying, processing, mapping, and analyzing storm-related tree impacts.
