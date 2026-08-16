@@ -1,44 +1,79 @@
-# Python GIS Data Automation
+# Storm Response GIS
 
-Automated geospatial data processing and analysis workflow using Python and GeoPandas.
+## Severe Weather Exposure & Emergency Response Analysis
 
-## Project Overview
+This project explores how GIS and Python can support emergency storm-response
+operations by identifying areas with elevated exposure to damaging weather and
+property impacts.
 
-This project demonstrates how Python can be used to automate a common GIS data-processing workflow.
+The project uses publicly available geospatial data to analyze historical
+severe-weather events, residential exposure, and geographic patterns that may
+influence emergency response demand.
 
-The workflow will take raw public spatial data and automatically:
+## Project Question
 
-**Raw spatial data → Validate → Clean → Reproject → Calculate attributes → Spatial join → Export → Summarize**
+**Which areas have the greatest combination of historical severe-weather
+exposure and potential residential property exposure?**
 
-The goal is to create a reusable and well-documented workflow that demonstrates practical GIS automation skills.
+## Project Goals
 
-## Skills Demonstrated
+- Acquire authoritative public geospatial datasets
+- Automate data cleaning and preparation with Python
+- Map historical damaging-weather events
+- Perform spatial joins between storm events and administrative boundaries
+- Incorporate population and housing exposure
+- Develop a transparent storm-exposure index
+- Identify and rank higher-exposure areas
+- Produce GIS-ready outputs and publication-quality maps
+- Document a reproducible geospatial workflow
+
+## Technologies
 
 - Python
 - GeoPandas
 - Pandas
-- Spatial data processing
-- Coordinate reference systems
-- Spatial joins
-- Attribute calculations
-- GIS workflow automation
-- Data quality control
-- Geospatial data export
+- Shapely
+- Matplotlib
+- Jupyter
+- GIS
+- GeoJSON / GeoPackage
 
-## Planned Repository Structure
+## Planned Workflow
 
-```text
-storm-response-gis
-│
-├── README.md
-├── data/
-│   ├── raw/
-│   └── processed/
-├── src/
-│   └── process_spatial_data.py
-├── maps/
-│   └── final_map.png
-├── notebooks/
-│   └── workflow_demo.ipynb
-├── requirements.txt
-└── LICENSE
+Raw Storm Data
+        ↓
+Data Validation & Cleaning
+        ↓
+Geospatial Conversion
+        ↓
+Coordinate Reference System Management
+        ↓
+Spatial Join
+        ↓
+Historical Storm Exposure
+        ↓
+Housing / Population Exposure
+        ↓
+Exposure Index
+        ↓
+GIS Outputs + Maps + Summary
+
+## Data Sources
+
+This project will use publicly available government geospatial data. Sources
+and methodology will be documented as datasets are incorporated.
+
+## Project Status
+
+🚧 **In Development**
+
+## Disclaimer
+
+This is an independent GIS portfolio project created for educational and
+professional-development purposes. It does not use proprietary company,
+customer, insurance-claim, or contractor data.
+
+## Author
+
+**Allie Potter**  
+GIS Analyst | Geospatial Developer
