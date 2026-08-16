@@ -28,7 +28,7 @@ The goal is to create a reusable and well-documented workflow that demonstrates 
 ## Planned Repository Structure
 
 ```text
-python-gis-data-automation/
+storm-response-gis
 │
 ├── README.md
 ├── data/
