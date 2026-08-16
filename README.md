@@ -31,19 +31,14 @@ The goal is to create a reusable and well-documented workflow that demonstrates 
 python-gis-data-automation/
 │
 ├── README.md
-│
 ├── data/
 │   ├── raw/
 │   └── processed/
-│
 ├── src/
 │   └── process_spatial_data.py
-│
 ├── maps/
 │   └── final_map.png
-│
 ├── notebooks/
 │   └── workflow_demo.ipynb
-│
 ├── requirements.txt
 └── LICENSE
