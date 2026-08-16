@@ -1,9 +1,33 @@
-# python-gis-data-automation
-# Automated geospatial data processing and analysis workflow using Python and GeoPandas.
+# Python GIS Data Automation
 
-###
-The basic idea is to take messy public geographic data and create a Python program that automatically:  Raw spatial data → validate → clean → reproject → calculate attributes → spatially join → export → summarize
+Automated geospatial data processing and analysis workflow using Python and GeoPandas.
 
+## Project Overview
+
+This project demonstrates how Python can be used to automate a common GIS data-processing workflow.
+
+The workflow will take raw public spatial data and automatically:
+
+**Raw spatial data → Validate → Clean → Reproject → Calculate attributes → Spatial join → Export → Summarize**
+
+The goal is to create a reusable and well-documented workflow that demonstrates practical GIS automation skills.
+
+## Skills Demonstrated
+
+- Python
+- GeoPandas
+- Pandas
+- Spatial data processing
+- Coordinate reference systems
+- Spatial joins
+- Attribute calculations
+- GIS workflow automation
+- Data quality control
+- Geospatial data export
+
+## Planned Repository Structure
+
+```text
 python-gis-data-automation/
 │
 ├── README.md
@@ -22,7 +46,4 @@ python-gis-data-automation/
 │   └── workflow_demo.ipynb
 │
 ├── requirements.txt
-│
 └── LICENSE
-###
-
