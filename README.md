@@ -35,6 +35,24 @@ The most frequently represented counties in the spatial analysis were:
 
 These values represent NOAA event records meeting the project's classification criteria and should not be interpreted as insurance claim counts or individual damaged properties.
 
+## Housing-Normalized Exposure
+
+![2025 Missouri Storm-Related Tree Impact Exposure](images/missouri_tree_impact_exposure_2025.jpg)
+
+Normalizing mapped tree-impact events by 2020 Census housing units changes the geographic pattern substantially. Counties with the highest raw event totals are not necessarily the counties with the highest number of mapped events relative to residential exposure.
+
+The highest 2025 event rates were:
+
+| County | Events | Housing Units | Events per 10,000 Housing Units |
+|---|---:|---:|---:|
+| Dade | 14 | 3,775 | 37.09 |
+| Douglas | 10 | 5,346 | 18.71 |
+| Carter | 5 | 2,675 | 18.69 |
+| Bates | 12 | 7,189 | 16.69 |
+| Howard | 7 | 4,368 | 16.03 |
+
+This metric is a normalized event-exposure indicator, not a probability of property damage or an insurance-risk score.
+
 ## Methodology
 
 ### 1. Data Acquisition
