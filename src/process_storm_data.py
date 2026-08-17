@@ -1,11 +1,20 @@
 import pandas as pd
 import geopandas as gpd
 from pathlib import Path
+import requests 
 
 # Define project folders
 project_folder = Path.home() / "OneDrive" / "Documents" / "storm-response-gis"
 raw_folder = project_folder / "data" / "raw"
 processed_folder = project_folder / "data" / "processed"
+
+# Read the Census API key from a local file
+census_key_file = project_folder / "census_api_key.txt"
+census_api_key = census_key_file.read_text().strip()
+
+# ------------------------------------------------------------
+# NOAA Storm Events processing
+# ------------------------------------------------------------
 
 # Find the NOAA Storm Events CSV
 csv_files = list(raw_folder.glob("*.csv"))
@@ -85,5 +94,70 @@ spatial_events.to_file(
 )
 
 print(f"Saved output to: {output_file}")
+
+# ------------------------------------------------------------
+# Census housing exposure data
+# ------------------------------------------------------------
+
+# Request 2020 Census housing-unit data for Missouri counties
+census_url = "https://api.census.gov/data/2020/dec/dhc"
+
+census_params = {
+    "get": "NAME,H1_001N",
+    "for": "county:*",
+    "in": "state:29",
+    "key": census_api_key,
+}
+
+response = requests.get(census_url, params=census_params)
+response.raise_for_status()
+
+housing_data = response.json()
+
+print(f"Census county records retrieved: {len(housing_data) - 1}")
+# Convert Census API response to a pandas DataFrame
+housing_df = pd.DataFrame(
+    housing_data[1:],
+    columns=housing_data[0]
+)
+
+# Convert housing-unit counts from text to integers
+housing_df["H1_001N"] = housing_df["H1_001N"].astype(int)
+
+print(housing_df.head())
+
+# Create a simplified county name field
+housing_df["COUNTY_NAME"] = (
+    housing_df["NAME"]
+    .str.replace(" County, Missouri", "", regex=False)
+    .str.replace(" city, Missouri", "", regex=False)
+)
+
+print(housing_df[["NAME", "COUNTY_NAME", "H1_001N"]].head(10))
+
+# Create the 5-digit county GEOID from state and county FIPS codes
+housing_df["GEOID"] = (
+    housing_df["state"].astype(str).str.zfill(2)
+    + housing_df["county"].astype(str).str.zfill(3)
+)
+
+# Ensure GEOID is stored as text in pandas
+housing_df["GEOID"] = housing_df["GEOID"].astype(str)
+
+print(housing_df[["COUNTY_NAME", "GEOID", "H1_001N"]].head(10))
+
+# Save cleaned Census housing data
+housing_output = processed_folder / "missouri_county_housing_2020.csv"
+
+housing_df.to_csv(housing_output, index=False)
+
+print(f"Saved Census housing data to: {housing_output}")
+
+# Save cleaned Census housing data
+housing_output = processed_folder / "missouri_county_housing_2020.csv"
+
+housing_df.to_csv(housing_output, index=False)
+
+print(f"Saved Census housing data to: {housing_output}")
 
 
