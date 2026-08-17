@@ -163,8 +163,12 @@ Map & Analyze Geographic Patterns
 - Python
 - pandas
 - GeoPandas
+- Requests
+- REST APIs
 - ArcGIS Pro
+- Spatial Join
 - NOAA Storm Events Database
+- U.S. Census Bureau Decennial Census
 - U.S. Census Bureau TIGERweb
 - GeoPackage
 - Git / GitHub
@@ -207,7 +211,6 @@ Event coordinates represent locations reported in the NOAA Storm Events dataset 
 
 Planned development includes:
 
-- Add Census housing exposure data
 - Calculate county-level exposure metrics
 - Incorporate reported property-damage estimates
 - Investigate tree-canopy or land-cover data
