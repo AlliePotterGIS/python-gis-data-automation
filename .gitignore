@@ -1,0 +1,10 @@
+# API credentials
+census_api_key.txt
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# ArcGIS temporary and lock files
+*.lock
+*.sr.lock
