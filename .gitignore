@@ -1,5 +1,8 @@
-# API credentials
+# Local API credentials
 census_api_key.txt
+
+# Generated processed data
+data/processed/
 
 # Python cache files
 __pycache__/
