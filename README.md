@@ -54,6 +54,7 @@ The highest 2025 event rates were:
 This metric is a normalized event-exposure indicator, not a probability of property damage or an insurance-risk score.
 
 ## Methodology
+
 ### County Spatial Exposure Analysis
 
 To avoid relying solely on NOAA's reported county/zone name, the workflow downloads Missouri county boundaries from the U.S. Census Bureau TIGERweb service and performs a point-in-polygon spatial join with GeoPandas.
@@ -65,6 +66,19 @@ The normalized exposure indicator is calculated as:
 **Event Rate = (Mapped Tree-Impact Events / Housing Units) × 10,000**
 
 This metric represents the number of mapped NOAA tree-impact event records per 10,000 housing units. It is intended for comparative spatial analysis and should not be interpreted as the probability of property damage or as an insurance-risk score.
+
+### Quality Assurance
+
+The automated workflow includes QA checks at each major processing stage:
+
+- 683 tree-impact events contained usable coordinates.
+- 682 events spatially intersected a Missouri county polygon.
+- 115 Missouri county or county-equivalent polygons were retrieved from Census TIGERweb.
+- 115 county records were produced in the final exposure dataset.
+- Spatial county assignments were compared against NOAA's `CZ_NAME` attribute as an additional validation step.
+
+The spatial comparison identified cases where NOAA's reported county/zone attribution differed from the county containing the event coordinates. For this reason, the final county-level analysis uses the point-in-polygon spatial assignment rather than relying exclusively on the NOAA county-name field.
+
 ### 1. Data Acquisition
 
 NOAA Storm Events bulk data for 2025 was used as the primary event dataset.
