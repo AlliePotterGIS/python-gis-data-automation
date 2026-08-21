@@ -153,11 +153,180 @@ housing_df.to_csv(housing_output, index=False)
 
 print(f"Saved Census housing data to: {housing_output}")
 
-# Save cleaned Census housing data
-housing_output = processed_folder / "missouri_county_housing_2020.csv"
+# ------------------------------------------------------------
+# County-level exposure analysis
+# ------------------------------------------------------------
 
-housing_df.to_csv(housing_output, index=False)
+# Event rate will be calculated as:
+# (tree-impact event count / total housing units) * 10,000
+#
+# This represents mapped NOAA tree-impact events per 10,000
+# housing units. It is an event-exposure indicator and should
+# not be interpreted as a property-damage probability or
+# insurance-risk score.
 
-print(f"Saved Census housing data to: {housing_output}")
+# Count mappable tree-impact events by NOAA county/zone name
+county_event_counts = (
+    spatial_events.groupby("CZ_NAME")
+    .size()
+    .reset_index(name="EVENT_COUNT")
+)
 
+# Standardize the county-name field for joining
+county_event_counts["COUNTY_NAME"] = (
+    county_event_counts["CZ_NAME"]
+    .str.title()
+)
 
+# Join event counts to Census housing data
+county_exposure = housing_df.merge(
+    county_event_counts[["COUNTY_NAME", "EVENT_COUNT"]],
+    on="COUNTY_NAME",
+    how="left"
+)
+
+# Counties with no matching event records receive a count of zero
+county_exposure["EVENT_COUNT"] = (
+    county_exposure["EVENT_COUNT"]
+    .fillna(0)
+    .astype(int)
+)
+
+# Calculate mapped tree-impact events per 10,000 housing units
+county_exposure["EVENT_RATE"] = (
+    county_exposure["EVENT_COUNT"]
+    / county_exposure["H1_001N"]
+    * 10000
+)
+
+print(
+    county_exposure[
+        ["COUNTY_NAME", "EVENT_COUNT", "H1_001N", "EVENT_RATE"]
+    ]
+    .sort_values("EVENT_RATE", ascending=False)
+    .head(10)
+)
+# Save the county-level exposure table
+# county_exposure_output = (
+#     processed_folder / "missouri_county_tree_impact_exposure_2025.csv"
+# )
+
+# county_exposure.to_csv(
+#     county_exposure_output,
+#     index=False
+# )
+
+# print(f"Saved county exposure table to: {county_exposure_output}")
+
+# ------------------------------------------------------------
+# Missouri county boundaries
+# ------------------------------------------------------------
+
+# Census TIGERweb 2025 county layer
+county_url = (
+    "https://tigerweb.geo.census.gov/arcgis/rest/services/"
+    "TIGERweb/State_County/MapServer/19/query"
+)
+
+county_params = {
+    "where": "STATE='29'",
+    "outFields": "*",
+    "returnGeometry": "true",
+    "outSR": "4326",
+    "f": "geojson",
+}
+
+county_response = requests.get(
+    county_url,
+    params=county_params
+)
+
+county_response.raise_for_status()
+
+print("Missouri county boundaries downloaded successfully")
+# Convert TIGERweb GeoJSON response to a GeoDataFrame
+counties = gpd.GeoDataFrame.from_features(
+    county_response.json()["features"],
+    crs="EPSG:4326"
+)
+
+print(f"Missouri county polygons loaded: {len(counties)}")
+# Spatially join tree-impact points to Missouri counties
+events_with_county = gpd.sjoin(
+    spatial_events,
+    counties[["GEOID", "NAME", "geometry"]],
+    how="left",
+    predicate="intersects"
+)
+
+print(
+    f"Tree-impact events matched to counties: "
+    f"{events_with_county['GEOID'].notna().sum()}"
+)
+# Count spatially matched tree-impact events by county GEOID
+spatial_county_counts = (
+    events_with_county
+    .dropna(subset=["GEOID"])
+    .groupby(["GEOID", "NAME"])
+    .size()
+    .reset_index(name="EVENT_COUNT")
+)
+
+print(
+    spatial_county_counts
+    .sort_values("EVENT_COUNT", ascending=False)
+    .head(10)
+)
+# Join spatial event counts to Census housing data using GEOID
+spatial_exposure = housing_df.merge(
+    spatial_county_counts[["GEOID", "NAME", "EVENT_COUNT"]],
+    on="GEOID",
+    how="left"
+)
+
+# Counties with no matched events receive a count of zero
+spatial_exposure["EVENT_COUNT"] = (
+    spatial_exposure["EVENT_COUNT"]
+    .fillna(0)
+    .astype(int)
+)
+
+# Calculate mapped tree-impact events per 10,000 housing units
+spatial_exposure["EVENT_RATE"] = (
+    spatial_exposure["EVENT_COUNT"]
+    / spatial_exposure["H1_001N"]
+    * 10000
+)
+
+print(
+    spatial_exposure[
+        ["COUNTY_NAME", "EVENT_COUNT", "H1_001N", "EVENT_RATE"]
+    ]
+    .sort_values("EVENT_RATE", ascending=False)
+    .head(10)
+)
+# Save the spatially derived county exposure table
+spatial_exposure_output = (
+    processed_folder / "missouri_county_spatial_exposure_2025.csv"
+)
+
+spatial_exposure.to_csv(
+    spatial_exposure_output,
+    index=False
+)
+
+print(f"Saved spatial exposure table to: {spatial_exposure_output}")
+
+# ------------------------------------------------------------
+# QA summary
+# ------------------------------------------------------------
+
+print("\n--- QA SUMMARY ---")
+print(f"National NOAA records: {len(df):,}")
+print(f"Missouri records: {len(missouri):,}")
+print(f"Wind-related Missouri records: {len(tree_events):,}")
+print(f"Tree-impact narrative matches: {len(tree_impacts):,}")
+print(f"Mappable tree-impact events: {len(spatial_events):,}")
+print(f"Events spatially matched to Missouri counties: {events_with_county['GEOID'].notna().sum():,}")
+print(f"Missouri county polygons: {len(counties):,}")
+print(f"Final county exposure records: {len(spatial_exposure):,}")
