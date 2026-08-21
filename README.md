@@ -265,6 +265,9 @@ Planned development includes:
 - Create additional publication-quality maps
 - Develop an interactive web GIS application
 
+## Project Logbook
+
+Development progress and work-session notes are documented in the [Project Logbook](LOGBOOK.md).
 ## Disclaimer
 
 This is an independent GIS portfolio project created for educational and professional-development purposes.
