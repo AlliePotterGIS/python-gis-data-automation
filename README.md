@@ -253,12 +253,16 @@ Event coordinates represent locations reported in the NOAA Storm Events dataset 
 
 Planned development includes:
 
-- Calculate county-level exposure metrics
-- Incorporate reported property-damage estimates
-- Investigate tree-canopy or land-cover data
+## Next Steps
+
+Planned development includes:
+
+- Incorporate reported NOAA property-damage estimates
+- Add tree-canopy or land-cover data
 - Develop a transparent storm-response priority index
-- Create publication-quality maps
-- Expand the analysis beyond a single year
+- Expand the analysis to multiple years
+- Compare temporal patterns in severe-weather exposure
+- Create additional publication-quality maps
 - Develop an interactive web GIS application
 
 ## Disclaimer
